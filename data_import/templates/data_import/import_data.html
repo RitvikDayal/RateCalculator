@@ -1,0 +1,36 @@
+{% extends 'data_import/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+{% block content %}
+
+    <main class="page contact-page">
+        <section class="portfolio-block contact">
+            <div class="container">
+                <div class="heading">
+                    <h2>Import Data</h2>
+                </div>
+                
+                <!-- Form Submition Message -->
+                <div class="row">
+					{% if messages %}
+						{% for message in messages %}
+							<div class="alert alert-{{ message.tags }}">
+								{{ message }}
+							</div>
+						{% endfor %}
+					{% endif %}
+				</div>
+
+                <form action="." method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                    <div class="form-group"><label for="subject">File Source:&nbsp;</label>{{ form.file}}</div>
+                    <p  style="font-size: 12px;color: #f54242!important;">
+                        {{ form.file.errors }}
+                    </p>
+                    <div class="form-group"><button class="btn btn-primary btn-block btn-lg" type="submit" style="margin-top: 30px;">Upload</button></div>
+                </form>
+            </div>
+        </section>
+    </main>
+{% endblock content %}
