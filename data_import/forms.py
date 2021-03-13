@@ -1,10 +1,9 @@
 from django import forms
+from django.core.validators import FileExtensionValidator
 from .models import excelFile
 
 class UploadFileForm(forms.ModelForm):
-    title = forms.CharField(max_length=50)
-    file = forms.FileField()
-
     class Meta:
         model = excelFile
-        fields = '__all__'
+        widgets = {'file': forms.FileInput(attrs={'accept': 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'})}
+        fields = ['file']

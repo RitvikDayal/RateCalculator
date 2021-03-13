@@ -3,10 +3,10 @@ import mysql.connector as connector
 from mysql.connector.errors import Error
 
 def reader(file):
-    tables = { 1: 5, 2: 5, 3: 5, 4: 5, 5: 4, 6: 5, 7: 4, 8: 3, 9: 3, 10: 3 }
+    tables = { 1: 5, 2: 5, 3: 5, 4: 5, 5: 4, 6: 5, 7: 6, 8: 3, 9: 3, 10: 3 }
 
     df = pd.read_excel(file, engine='openpyxl', sheet_name='Data', header=None)
-    df = df[[0,1,2,3,4, 5]]
+    df = df[[0,1,2,3,4,5,6]]
 
     for i in tables:
         temp_df = df.loc[df[0] == i]
@@ -20,19 +20,34 @@ def reader(file):
 def upload2SQL(table, tablename):
     try:
         conn = connector.connect(
-            host='us-cdbr-east-03.cleardb.com',
-            user='b71e281f159260', 
-            password='34e58750', 
-            database='heroku_72b766963b50486', 
+            host='localhost',
+            user='root', 
+            password='', 
+            database='heroku_72b766963b50486',  
             charset='utf8'
         )
         cursor = conn.cursor()
 
-        for(row, rs) in table.iterrows():    
-            print(rs)
-            query = 'insert into rates (Loan_Type_ID, Term, HighBalance, Rate, Point) values ( '+', '.join(str(ele) for ele in rs)+')'
+        for(row, rs) in table.iterrows():
+
+            for i in range(len(rs)):
+                if type(rs[i+1]) == type('s') and (' ' in rs[i+1] or rs[i+1].isalpha()):
+                    rs[i+1] = '\''+rs[i+1]+'\''
+
+            column_list = []
+            cursor.execute('describe '+tablename)
+            schemma = cursor.fetchall()
+
+            for i in range(len(schemma)):
+                column_list.append(schemma[i][0])
+            column_list = column_list[1:len(column_list)-1]
+
+            print('List of Columns: ',column_list)
+            
+            query = "insert into "+str(tablename)+" ("+", ".join(str(column) for column in column_list)+") values ( "+", ".join(str(ele) for ele in rs)+")"            
+            print(query)
             cursor.execute(query)
-        
+    
         conn.commit()
         conn.close()
 

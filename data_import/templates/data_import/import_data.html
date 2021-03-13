@@ -1,6 +1,5 @@
 {% extends 'data_import/base.html' %}
 {% load static %}
-{% load crispy_forms_tags %}
 {% load widget_tweaks %}
 {% block content %}
 
@@ -22,9 +21,13 @@
 					{% endif %}
 				</div>
 
-                <form action="." method="POST" enctype="multipart/form-data">
+                <form action="" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                    <div class="form-group"><label for="subject">File Source:&nbsp;</label>{{ form.file}}</div>
+                    <div class="form-group">
+                        <label for="subject">File Source:&nbsp;</label>
+                            {{ form.file|add_class:"form-control"}}
+                    </div>
+                    
                     <p  style="font-size: 12px;color: #f54242!important;">
                         {{ form.file.errors }}
                     </p>

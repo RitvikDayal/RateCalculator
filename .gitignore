@@ -1,5 +1,4 @@
+.vs_code
 venv
 __pycache__
 db.sqlite3
-.vscode
-.DS_Store
