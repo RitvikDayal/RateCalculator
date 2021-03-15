@@ -15,13 +15,13 @@ def reader(file):
     df = df[[0,1,2,3,4,5,6]]
 
     for i in tables:
-        temp_df = df.loc[df[0] == i]
-        temp_df.drop([0], axis=1, inplace=True)
-        temp_df = temp_df.reset_index(drop=True)
-        tables[i] = temp_df[[index for index in range(1, tables[i]+1)]]
-        tables[i].dropna(inplace=True)
+        temp_df = df.loc[df[0] == i] # separating row from the entire table by matching table id
+        temp_df.drop([0], axis=1, inplace=True) # dropping the first column
+        temp_df = temp_df.reset_index(drop=True) # Resetting the index of the dataframe incase of non sequential data
+        tables[i] = temp_df[[index for index in range(1, tables[i]+1)]] # dropping unnecessary columns from the extracted table
+        tables[i].dropna(inplace=True) # dropping the rows containing at least one NaN value.
 
-    return tables
+    return tables # Returning a dictionary with all the tables sorted out {table_id:table}
 
 def upload2SQL(table, tablename):
     '''
