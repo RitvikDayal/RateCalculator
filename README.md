@@ -1,4 +1,4 @@
-# BIA_LoanFactory
+# LoanFactory
 ----------------------------------------------------------------
 Web portal to upload data to MySQL Database using excel sheets and retrieving data through REST APIs.
 
